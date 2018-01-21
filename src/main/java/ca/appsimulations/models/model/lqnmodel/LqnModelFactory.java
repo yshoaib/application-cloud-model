@@ -61,10 +61,7 @@ public class LqnModelFactory {
                                          Processor processor = ProcessorFactory.build(lqnModel,
                                                                                       container.name(),
                                                                                       service.isReference(),
-                                                                                      container.containerImage()
-                                                                                              .containerType()
-                                                                                              .getCores());
-
+                                                                                      container.containerType().getCores());
 
                                          Task task = TaskFactory.build(service.name(),
                                                                        lqnModel,
@@ -89,8 +86,6 @@ public class LqnModelFactory {
         allCalls.stream().forEach(call -> {
             Entry sourceEntry = lqnModel.entryByName(call.sourceEntry().name());
             Entry destEntry = lqnModel.entryByName(call.destinationEntry().name());
-
-
             SyncCallFactory.build(lqnModel, sourceEntry, destEntry, call.numCalls());
         });
 

@@ -13,4 +13,5 @@ import lombok.experimental.Accessors;
 public class Container {
     private final String name;
     private final ContainerImage containerImage;
+    private final ContainerType containerType;
 }

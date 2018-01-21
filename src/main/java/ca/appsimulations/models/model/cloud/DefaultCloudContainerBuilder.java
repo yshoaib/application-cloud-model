@@ -7,23 +7,32 @@ import static java.util.Arrays.asList;
 
 public class DefaultCloudContainerBuilder {
 
-    public static Cloud build(App app) {
-        Cloud cloud1 = new Cloud("cloud1", asList(SMALL, MEDIUM, LARGE));
-        buildSimpleContainer("pClient", "Browser", cloud1, app, "Browser");
-        buildSimpleContainer("pTaskA", "TaskA", cloud1, app, "TaskA");
-        buildSimpleContainer("pTaskB", "TaskB", cloud1, app, "TaskB");
-        buildSimpleContainer("pTaskC", "TaskC", cloud1, app, "TaskC");
-        buildSimpleContainer("pTaskD", "TaskD", cloud1, app, "TaskD");
-        return cloud1;
-    }
+    public static Cloud build(App app){
+        Cloud cloud = CloudBuilder.builder()
+                .name("cloud1")
+                .containerTypes(asList(SMALL, MEDIUM, LARGE))
+                .containerImage("Browser")
+                .service("Browser", app)
+                .buildContainerImage()
+                .containerImage("TaskA")
+                .service("TaskA", app)
+                .buildContainerImage()
+                .containerImage("TaskB")
+                .service("TaskB", app)
+                .buildContainerImage()
+                .containerImage("TaskC")
+                .service("TaskC", app)
+                .buildContainerImage()
+                .containerImage("TaskD")
+                .service("TaskD", app)
+                .buildContainerImage()
+                .build();
 
-    private static void buildSimpleContainer(String containerName, String imageName, Cloud cloud1, App app, String
-            serviceName) {
-        ContainerFactory.build(containerName,
-                               ContainerImageFactory.build(imageName,
-                                                           SMALL,
-                                                           app.findService(serviceName).get(),
-                                                           cloud1).get(),
-                               cloud1);
+        cloud.instantiateContainer("pClient", "Browser", SMALL);
+        cloud.instantiateContainer("pTaskA", "TaskA", SMALL);
+        cloud.instantiateContainer("pTaskB", "TaskB", SMALL);
+        cloud.instantiateContainer("pTaskC", "TaskC", SMALL);
+        cloud.instantiateContainer("pTaskD", "TaskD", SMALL);
+        return cloud;
     }
 }
