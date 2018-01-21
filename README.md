@@ -17,6 +17,10 @@ Maven
 </dependency>
 ```
 
+Changelog
+=========
+[Changelog](CHANGELOG.md)
+
 Related projects
 ===================
 https://github.com/yshoaib/jLQNInterface
