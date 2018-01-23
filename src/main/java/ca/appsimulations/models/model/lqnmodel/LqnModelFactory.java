@@ -93,22 +93,6 @@ public class LqnModelFactory {
         return lqnModel;
     }
 
-    public LqnModel buildNewModelFromModelTemplate(List<Integer> variables,
-                                                   Map taskContainerTypeMap,
-                                                   LqnModel modelTemplate) {
-        // need to do a deep copy of the model template so that the original is
-        // not changed.
-        LqnModel lqnModel = cloner.deepClone(modelTemplate);
-
-        //need duplication here. may note require cloning.
-        // for each task in the lqn model attach a Container-type processor.
-
-
-        // replicate the tasks based on the variables of the solution.
-        return lqnModel;
-    }
-
-
     public static SolverParams buildDefaultSolverParams() {
         return SolverParams
                 .builder()
