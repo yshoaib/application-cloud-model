@@ -3,6 +3,7 @@ package ca.appsimulations.models.model.application;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Builder
 @RequiredArgsConstructor
 @Accessors(chain = true, fluent = true)
+@ToString(of = "name", includeFieldNames = false)
 public class ServiceEntry {
     private final String name;
     private final String activityNamePhase1;
@@ -33,4 +35,5 @@ public class ServiceEntry {
     public List<Call> callsTo() {
         return callResolver.callsTo();
     }
+
 }

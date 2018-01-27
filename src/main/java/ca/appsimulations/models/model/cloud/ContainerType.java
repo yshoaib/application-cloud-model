@@ -1,8 +1,11 @@
 package ca.appsimulations.models.model.cloud;
 
+import lombok.ToString;
+
 /**
  * Created by maverick on 2017-06-11.
  */
+@ToString(of = "name", includeFieldNames = false)
 public enum ContainerType {
     SMALL("small",
           1,

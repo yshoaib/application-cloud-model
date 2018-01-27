@@ -94,7 +94,7 @@ public class AppBuilder {
         }
 
         public ServiceBuilder service(String serviceName, App app, int threads) {
-            Service newService = Service.builder().name(serviceName).app(app).threads(threads).build();
+            Service newService = Service.builder().name(serviceName).threads(threads).build();
             if (app.addService(newService)) {
                 service = newService;
             }
