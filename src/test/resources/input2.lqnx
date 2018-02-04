@@ -9,7 +9,9 @@
             <entry name="load_1" type="PH1PH2">
                 <entry-phase-activities>
                     <activity host-demand-mean="2.0" name="load_1" phase="1">
-                        <synch-call calls-mean="1.0" dest="funcA1_1"/>
+                        <synch-call calls-mean="0.14" dest="funcA1_1"/>
+                        <synch-call calls-mean="0.29" dest="funcA1_2"/>
+                        <synch-call calls-mean="0.57" dest="funcA1_3"/>
                     </activity>
                 </entry-phase-activities>
             </entry>
@@ -18,6 +20,28 @@
     <processor name="pTaskA" quantum="0.2" scheduling="ps">
         <task multiplicity="10" name="TaskA_1" scheduling="fcfs">
             <entry name="funcA1_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="3.0" name="funcA1_1" phase="1">
+                        <synch-call calls-mean="3.0" dest="funcB1_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+        </task>
+    </processor>
+    <processor multiplicity="2" name="pTaskA_2" quantum="0.2" scheduling="ps">
+        <task multiplicity="10" name="TaskA_2" scheduling="fcfs">
+            <entry name="funcA1_2" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="3.0" name="funcA1_1" phase="1">
+                        <synch-call calls-mean="3.0" dest="funcB1_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+        </task>
+    </processor>
+    <processor multiplicity="4" name="pTaskA_3" quantum="0.2" scheduling="ps">
+        <task multiplicity="10" name="TaskA_3" scheduling="fcfs">
+            <entry name="funcA1_3" type="PH1PH2">
                 <entry-phase-activities>
                     <activity host-demand-mean="3.0" name="funcA1_1" phase="1">
                         <synch-call calls-mean="3.0" dest="funcB1_1"/>

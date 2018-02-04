@@ -1,10 +1,13 @@
 package ca.appsimulations.models.model.application;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
@@ -15,6 +18,7 @@ import static java.util.stream.Collectors.toList;
 
 @Data
 @Accessors(chain = true, fluent = true)
+@ToString(of = "name", includeFieldNames = false)
 public class App {
     private final String name;
     private double responseTimeObjective;
@@ -44,5 +48,30 @@ public class App {
 
     public List<Service> findNonReferenceServices() {
         return services.stream().filter(service -> service.isReference() == false).collect(toList());
+    }
+
+    public List<Service> findReferenceServices() {
+        return services.stream().filter(service -> service.isReference()).collect(toList());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        App app = (App) o;
+        return Objects.equals(name, app.name);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), name);
     }
 }

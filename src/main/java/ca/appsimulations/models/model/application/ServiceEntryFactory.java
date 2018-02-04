@@ -4,8 +4,10 @@ import java.util.Optional;
 
 public class ServiceEntryFactory {
 
-    public static Optional<ServiceEntry> build(String name, String activityNamePhase1, Service service, double
-            serviceDemand) {
+    public static Optional<ServiceEntry> build(String name,
+                                               String activityNamePhase1,
+                                               Service service,
+                                               double serviceDemand) {
         Optional<ServiceEntry> result = Optional.empty();
         ServiceEntry entry =
                 ServiceEntry.builder().name(name).activityNamePhase1(activityNamePhase1).service(service).serviceDemand(

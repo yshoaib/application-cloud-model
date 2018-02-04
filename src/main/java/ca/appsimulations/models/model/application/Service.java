@@ -3,13 +3,12 @@ package ca.appsimulations.models.model.application;
 
 import ca.appsimulations.models.model.cloud.Container;
 import ca.appsimulations.models.model.cloud.ContainerImage;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
@@ -18,6 +17,7 @@ import static java.util.stream.Collectors.toList;
 @Data
 @Builder
 @Accessors(chain = true, fluent = true)
+@ToString(of = "name", includeFieldNames = false)
 public class Service {
     private final String name;
     private final App app;
@@ -68,5 +68,27 @@ public class Service {
 
     public boolean isReference() {
         return calledBy().size() == 0 && callsTo().size() > 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Service service = (Service) o;
+        return Objects.equals(name, service.name) &&
+               Objects.equals(app, service.app);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), name, app);
     }
 }

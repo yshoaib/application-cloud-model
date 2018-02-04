@@ -1,6 +1,7 @@
 package ca.appsimulations.models.model.cloud;
 
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import static java.util.stream.Collectors.toList;
  */
 @Data
 @Accessors(chain = true, fluent = true)
+@ToString(of = "name", includeFieldNames = false)
 public class Cloud {
     private final String name;
     private final List<ContainerType> containerTypes = new ArrayList<>();
@@ -29,16 +31,31 @@ public class Cloud {
         List<ContainerImage> images =
                 containerImages.stream().filter(containerImage -> containerImage.name().equals(name)).collect(toList());
 
-        if(images.isEmpty() == false){
+        if (images.isEmpty() == false) {
             result = Optional.of(images.get(0));
         }
 
         return result;
     }
 
-    public Container instantiateContainer(String containerName, String containerImageName, ContainerType containerType) {
+    public Container instantiateContainer(String containerName,
+                                          String containerImageName,
+                                          ContainerType containerType) {
         Optional<ContainerImage> containerImageOptional = this.findContainerImage(containerImageName);
-        if(containerImageOptional.isPresent() == false){
+        if (containerImageOptional.isPresent() == false) {
+            throw new IllegalArgumentException(
+                    "unable to instantiate container image: " + containerName + " because there is no container " +
+                    "image: " + containerImageName);
+        }
+        ContainerImage image = containerImageOptional.get();
+
+        return image.instantiate(containerName, this, containerType);
+    }
+
+    public Container instantiateContainer(String containerImageName, ContainerType containerType) {
+        Optional<ContainerImage> containerImageOptional = this.findContainerImage(containerImageName);
+        String containerName = "p" + containerImageName;
+        if (containerImageOptional.isPresent() == false) {
             throw new IllegalArgumentException(
                     "unable to instantiate container image: " + containerName + " because there is no container " +
                     "image: " + containerImageName);
