@@ -28,7 +28,7 @@ public class LqnModelFactoryTest2 {
     private File outputFile;
     private SoftAssertions softly;
     private final String LQN_XSD = "lqn.xsd";
-    private final String INPUT_LQNX = "input.lqnx";
+    private final String INPUT_LQNX = "input2.lqnx";
     private final String OUTPUT_FILE = "test-output.lqnx";
 
     private static final double CONVERGENCE = 0.01;

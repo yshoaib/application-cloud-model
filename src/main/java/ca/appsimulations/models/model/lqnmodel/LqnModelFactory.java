@@ -134,8 +134,9 @@ public class LqnModelFactory {
                 sourceLqnEntries.forEach(lqnSourceEntry -> {
                     destLqnEntries.forEach(lqnDestEntry -> {
                         double numCalls =
-                                Math.round(cloudAppLqnMap.getProcessorMultiplicity(lqnDestEntry) * 1.0 /
-                                           sumProcessorMultiplicity.get() * 100.00) / 100.00;
+                                Math.round(
+                                        cloudAppLqnMap.getProcessorMultiplicity(lqnDestEntry) * call.numCalls() * 1.0 /
+                                        sumProcessorMultiplicity.get() * 100.00) / 100.00;
                         SyncCallFactory.build(lqnModel, lqnSourceEntry, lqnDestEntry, numCalls);
                     });
                 });
