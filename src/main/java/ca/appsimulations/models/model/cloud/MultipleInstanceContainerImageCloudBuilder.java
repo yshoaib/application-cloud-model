@@ -32,9 +32,12 @@ public class MultipleInstanceContainerImageCloudBuilder {
 
         cloud.instantiateContainer("pClient", "Browser", SMALL);
         cloud.instantiateContainer("pTaskA", "TaskA", SMALL);
+        cloud.instantiateContainer("pTaskA_4", "TaskA", SMALL);
         cloud.instantiateContainer("pTaskA_2", "TaskA", MEDIUM);
+        cloud.instantiateContainer("pTaskA_5", "TaskA", MEDIUM);
         cloud.instantiateContainer("pTaskA_3", "TaskA", LARGE);
         cloud.instantiateContainer("pTaskB", "TaskB", SMALL);
+        cloud.instantiateContainer("pTaskB_1", "TaskB", MEDIUM);
         cloud.instantiateContainer("pTaskC", "TaskC", SMALL);
         cloud.instantiateContainer("pTaskD", "TaskD", SMALL);
         return cloud;
