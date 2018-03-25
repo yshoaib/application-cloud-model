@@ -18,7 +18,6 @@ import ca.appsimulations.models.model.cloud.Container;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.rits.cloning.Cloner;
 import lombok.Builder;
 import lombok.Data;
 
@@ -41,12 +40,6 @@ public class LqnModelFactory {
     private static final String XML_NAME = "lqn-model";
     private static final String XML_DESCRIPTION = "lqn model";
     private static final String COMMENT = "lqn model";
-
-    private Cloner cloner;
-
-    public LqnModelFactory(Cloner cloner) {
-        this.cloner = cloner;
-    }
 
     public static LqnModel build(App app,
                                  LqnXmlDetails xmlDetails,
@@ -100,21 +93,21 @@ public class LqnModelFactory {
 
                 serviceQueue.add(destService);
 
-                Collection<Task> sourceTasks = cloudAppLqnMap.getTask(sourceService);
-                Collection<Task> destTasks = cloudAppLqnMap.getTask(destService);
+                Collection<Task> sourceTasks = cloudAppLqnMap.getTasks(sourceService);
+                Collection<Task> destTasks = cloudAppLqnMap.getTasks(destService);
 
-                AtomicInteger entryId = new AtomicInteger(1);
+                AtomicInteger sourceEntryId = new AtomicInteger(1);
                 List<Entry> sourceLqnEntries = sourceTasks
                         .stream()
                         .map(sourceTask -> buildLqnEntry(lqnModel,
                                                          cloudAppLqnMap,
                                                          sourceService,
-                                                         entryId.getAndIncrement(),
+                                                         sourceEntryId.getAndIncrement(),
                                                          sourceTask,
                                                          sourceEntry)
                         ).collect(toList());
 
-                AtomicInteger entryId2 = new AtomicInteger(1);
+                AtomicInteger destEntryId = new AtomicInteger(1);
                 AtomicInteger sumProcessorMultiplicity = new AtomicInteger();
                 List<Entry> destLqnEntries = destTasks
                         .stream()
@@ -122,7 +115,105 @@ public class LqnModelFactory {
                                  Entry entry = buildLqnEntry(lqnModel,
                                                              cloudAppLqnMap,
                                                              destService,
-                                                             entryId2.getAndIncrement(),
+                                                             destEntryId.getAndIncrement(),
+                                                             destTask,
+                                                             destEntry);
+                                 cloudAppLqnMap.add(entry, destTask.getProcessor().getMultiplicity());
+                                 sumProcessorMultiplicity.addAndGet(destTask.getProcessor().getMultiplicity());
+                                 return entry;
+                             }
+                        ).collect(toList());
+
+                sourceLqnEntries.forEach(lqnSourceEntry -> {
+                    destLqnEntries.forEach(lqnDestEntry -> {
+                        double numCalls =
+                                Math.round(
+                                        cloudAppLqnMap.getProcessorMultiplicity(lqnDestEntry) * call.numCalls() * 1.0 /
+                                        sumProcessorMultiplicity.get() * 100.00) / 100.00;
+                        SyncCallFactory.build(lqnModel, lqnSourceEntry, lqnDestEntry, numCalls);
+                    });
+                });
+            });
+        }
+
+        lqnModel.buildRefTasksFromExistingTasks();
+        return lqnModel;
+    }
+
+
+    public static LqnModel buildWithLqnReplication(App app,
+                                                   LqnXmlDetails xmlDetails,
+                                                   SolverParams solverParams) {
+        LqnModel lqnModel = new LqnModel();
+        lqnModel.xmlDetails(xmlDetails);
+        lqnModel.solverParams(solverParams);
+
+        CloudAppLqnMap cloudAppLqnMap = new CloudAppLqnMap();
+
+        // first build all the tasks from the services
+        // no entries and no calls between the tasks are built yet.
+        app.services()
+                .stream()
+                .forEach(service -> {
+                    AtomicInteger taskId = new AtomicInteger(1);
+                    Container container = service.containers().get(0);
+                    int replicationCount = service.containers().size();
+
+                    Processor processor = ProcessorFactory.build(lqnModel,
+                                                                 container.name(),
+                                                                 service.isReference(),
+                                                                 container.containerType().getCores());
+                    cloudAppLqnMap.add(service, container, processor);
+
+                    Task task = TaskFactory.build(service.name() + "_" + taskId,
+                                                  lqnModel,
+                                                  processor,
+                                                  service.isReference(),
+                                                  service.threads());
+                    taskId.getAndIncrement();
+                    cloudAppLqnMap.add(service, task);
+
+                });
+
+
+        Queue<Service> serviceQueue = new LinkedList<>();
+        serviceQueue.addAll(app.findReferenceServices());
+
+        while (serviceQueue.isEmpty() == false) {
+            Service sourceService = serviceQueue.remove();
+            List<Call> calls = sourceService.callsTo();
+
+            calls.forEach(call -> {
+                ServiceEntry sourceEntry = call.sourceEntry();
+                ServiceEntry destEntry = call.destinationEntry();
+
+                Service destService = destEntry.service();
+
+                serviceQueue.add(destService);
+
+                Collection<Task> sourceTasks = cloudAppLqnMap.getTasks(sourceService);
+                Collection<Task> destTasks = cloudAppLqnMap.getTasks(destService);
+
+                AtomicInteger sourceEntryId = new AtomicInteger(1);
+                List<Entry> sourceLqnEntries = sourceTasks
+                        .stream()
+                        .map(sourceTask -> buildLqnEntry(lqnModel,
+                                                         cloudAppLqnMap,
+                                                         sourceService,
+                                                         sourceEntryId.getAndIncrement(),
+                                                         sourceTask,
+                                                         sourceEntry)
+                        ).collect(toList());
+
+                AtomicInteger destEntryId = new AtomicInteger(1);
+                AtomicInteger sumProcessorMultiplicity = new AtomicInteger();
+                List<Entry> destLqnEntries = destTasks
+                        .stream()
+                        .map(destTask -> {
+                                 Entry entry = buildLqnEntry(lqnModel,
+                                                             cloudAppLqnMap,
+                                                             destService,
+                                                             destEntryId.getAndIncrement(),
                                                              destTask,
                                                              destEntry);
                                  cloudAppLqnMap.add(entry, destTask.getProcessor().getMultiplicity());
@@ -213,11 +304,11 @@ class CloudAppLqnMap {
         serviceEntryMap.put(service, entry);
     }
 
-    public Collection<Task> getTask(Service service) {
+    public Collection<Task> getTasks(Service service) {
         return serviceTaskMap.get(service);
     }
 
-    public Collection<Entry> getEntry(Service service) {
+    public Collection<Entry> getEntries(Service service) {
         return serviceEntryMap.get(service);
     }
 
