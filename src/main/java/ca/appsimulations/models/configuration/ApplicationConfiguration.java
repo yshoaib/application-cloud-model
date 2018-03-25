@@ -15,7 +15,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public LqnModelFactory lqnModelFactory(Cloner cloner) {
-        return new LqnModelFactory(cloner);
+    public LqnModelFactory lqnModelFactory() {
+        return new LqnModelFactory();
     }
 }

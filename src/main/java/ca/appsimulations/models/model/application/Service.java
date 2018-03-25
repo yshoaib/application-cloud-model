@@ -3,6 +3,7 @@ package ca.appsimulations.models.model.application;
 
 import ca.appsimulations.models.model.cloud.Container;
 import ca.appsimulations.models.model.cloud.ContainerImage;
+import ca.appsimulations.models.model.cloud.ContainerType;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -68,6 +69,10 @@ public class Service {
 
     public boolean isReference() {
         return calledBy().size() == 0 && callsTo().size() > 0;
+    }
+
+    public long findNumberOfContainersByType(ContainerType type) {
+        return containers().stream().filter(container -> container.containerType().equals(type)).count();
     }
 
     @Override
