@@ -65,7 +65,7 @@ public class LqnModelFactory {
                                                                                       service.isReference(),
                                                                                       container.containerType()
                                                                                               .getCores());
-                                         cloudAppLqnMap.add(service, container, processor);
+                                         cloudAppLqnMap.add(service, processor);
 
                                          Task task = TaskFactory.build(service.name() + "_" + taskId,
                                                                        lqnModel,
@@ -156,23 +156,27 @@ public class LqnModelFactory {
                 .stream()
                 .forEach(service -> {
                     AtomicInteger taskId = new AtomicInteger(1);
-                    Container container = service.containers().get(0);
-                    int replicationCount = service.containers().size();
+                    service.getContainerTypes().stream().forEach(containerType -> {
+                        String name = "p" + service.name() + "_" + containerType.name();
 
-                    Processor processor = ProcessorFactory.build(lqnModel,
-                                                                 container.name(),
-                                                                 service.isReference(),
-                                                                 container.containerType().getCores());
-                    cloudAppLqnMap.add(service, container, processor);
+                        Integer replicationCount = service.getReplicationCount(containerType);
 
-                    Task task = TaskFactory.build(service.name() + "_" + taskId,
-                                                  lqnModel,
-                                                  processor,
-                                                  service.isReference(),
-                                                  service.threads());
-                    taskId.getAndIncrement();
-                    cloudAppLqnMap.add(service, task);
+                        Processor processor = ProcessorFactory.build(lqnModel,
+                                                                     name,
+                                                                     service.isReference(),
+                                                                     containerType.getCores(),
+                                                                     replicationCount);
+                        cloudAppLqnMap.add(service, processor);
 
+                        Task task = TaskFactory.build(service.name() + "_" + taskId,
+                                                      lqnModel,
+                                                      processor,
+                                                      service.isReference(),
+                                                      service.threads(),
+                                                      replicationCount);
+                        taskId.getAndIncrement();
+                        cloudAppLqnMap.add(service, task);
+                    });
                 });
 
 
@@ -193,6 +197,8 @@ public class LqnModelFactory {
 
                 Collection<Task> sourceTasks = cloudAppLqnMap.getTasks(sourceService);
                 Collection<Task> destTasks = cloudAppLqnMap.getTasks(destService);
+
+                addFanIn(sourceTasks, destTasks);
 
                 AtomicInteger sourceEntryId = new AtomicInteger(1);
                 List<Entry> sourceLqnEntries = sourceTasks
@@ -217,13 +223,15 @@ public class LqnModelFactory {
                                                              destTask,
                                                              destEntry);
                                  cloudAppLqnMap.add(entry, destTask.getProcessor().getMultiplicity());
-                                 sumProcessorMultiplicity.addAndGet(destTask.getProcessor().getMultiplicity());
+                                 sumProcessorMultiplicity.addAndGet(destTask.getProcessor().getMultiplicity() *
+                                                                    destTask.getProcessor().getReplication());
                                  return entry;
                              }
                         ).collect(toList());
 
                 sourceLqnEntries.forEach(lqnSourceEntry -> {
                     destLqnEntries.forEach(lqnDestEntry -> {
+
                         double numCalls =
                                 Math.round(
                                         cloudAppLqnMap.getProcessorMultiplicity(lqnDestEntry) * call.numCalls() * 1.0 /
@@ -236,6 +244,15 @@ public class LqnModelFactory {
 
         lqnModel.buildRefTasksFromExistingTasks();
         return lqnModel;
+    }
+
+    private static void addFanIn(Collection<Task> sourceTasks, Collection<Task> destTasks) {
+        sourceTasks.stream().forEach(src -> {
+            destTasks.stream().forEach(dest -> {
+                src.adddFanOut(dest, dest.getReplication());
+                dest.adddFanIn(src, src.getReplication());
+            });
+        });
     }
 
     private static Entry buildLqnEntry(LqnModel lqnModel,
@@ -283,16 +300,12 @@ public class LqnModelFactory {
 @Builder
 @Data
 class CloudAppLqnMap {
-    private final Map<Container, Processor> containerProcessorMap = Maps.newHashMap();
     private final Multimap<Service, Processor> serviceProcessorMap = ArrayListMultimap.create();
     private final Multimap<Service, Task> serviceTaskMap = ArrayListMultimap.create();
     private final Multimap<Service, Entry> serviceEntryMap = ArrayListMultimap.create();
     private final Map<Entry, Integer> entryProcessorMultiplicityMap = Maps.newHashMap();
 
-    public void add(Service service,
-                    Container container,
-                    Processor processor) {
-        containerProcessorMap.put(container, processor);
+    public void add(Service service, Processor processor) {
         serviceProcessorMap.put(service, processor);
     }
 
