@@ -7,6 +7,7 @@ import ca.appsimulations.jlqninterface.lqn.model.writer.LqnModelWriter;
 import ca.appsimulations.models.model.application.App;
 import ca.appsimulations.models.model.application.DefaultAppBuilder;
 import ca.appsimulations.models.model.cloud.MultipleInstanceContainerImageCloudBuilder;
+import ca.appsimulations.models.model.cloud.MultipleInstanceContainerImageCloudBuilderWithReplication;
 import ca.appsimulations.models.model.lqnmodel.LqnModelFactory;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.SoftAssertions;
@@ -21,13 +22,13 @@ import java.io.IOException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class LqnModelFactoryTest3 {
+public class LqnModelFactoryTest3Replication {
 
 
     private File outputFile;
     private SoftAssertions softly;
     private final String LQN_XSD = "lqn.xsd";
-    private final String INPUT_LQNX = "input2.lqnx";
+    private final String INPUT_LQNX = "input3_rep.lqnx";
     private final String OUTPUT_FILE = "test-output.lqnx";
 
     private static final double CONVERGENCE = 0.01;
@@ -56,13 +57,34 @@ public class LqnModelFactoryTest3 {
                                           maxReplicas,
                                           responseTime);
 
+        MultipleInstanceContainerImageCloudBuilderWithReplication.build(app);
+
+        LqnXmlDetails xmlDetails = buildLqnXmlDetails();
+        SolverParams solverParams = buildSolverParams();
+        LqnModel lqnModel = LqnModelFactory.buildWithLqnReplication(app, xmlDetails, solverParams);
+        new LqnModelWriter().write(lqnModel, outputFile.getAbsolutePath());
+        //        assertXmlAgainstSchema(outputFile.getAbsolutePath(), LQN_XSD);
+        assertThat(readFile(outputFile)).as("xml contents verification").isXmlEqualToContentOf(getResourceFile(
+                INPUT_LQNX));
+        softly.assertAll();
+    }
+
+    @Test
+    public void testLqnModelFactory2() throws Exception {
+        String appName = "test";
+        int maxReplicas = 10;
+        double responseTime = 350.0;
+        App app = DefaultAppBuilder.build(appName,
+                                          maxReplicas,
+                                          responseTime);
+
         MultipleInstanceContainerImageCloudBuilder.build(app);
 
         LqnXmlDetails xmlDetails = buildLqnXmlDetails();
         SolverParams solverParams = buildSolverParams();
         LqnModel lqnModel = LqnModelFactory.buildWithLqnReplication(app, xmlDetails, solverParams);
         new LqnModelWriter().write(lqnModel, outputFile.getAbsolutePath());
-        assertXmlAgainstSchema(outputFile.getAbsolutePath(), LQN_XSD);
+        //     assertXmlAgainstSchema(outputFile.getAbsolutePath(), LQN_XSD);
         assertThat(readFile(outputFile)).as("xml contents verification").isXmlEqualToContentOf(getResourceFile(
                 INPUT_LQNX));
         softly.assertAll();

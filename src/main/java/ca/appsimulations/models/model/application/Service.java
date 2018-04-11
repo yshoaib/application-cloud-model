@@ -7,10 +7,7 @@ import ca.appsimulations.models.model.cloud.ContainerType;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -27,6 +24,7 @@ public class Service {
     private final List<ContainerImage> containerImages = new ArrayList<>();
     private final CallResolver callResolver = new CallResolver();
     private final List<ServiceEntry> entries = new ArrayList<>();
+    private final Map<ContainerType, Integer> replicationCountByContainerTypes = new HashMap();
 
     public void calls(String serviceName, Call call) {
         callResolver.calls(serviceName, call);
@@ -67,12 +65,29 @@ public class Service {
         return entryAdded;
     }
 
+    public void addContainer(Container container, ContainerType containerType) {
+        synchronized (this.replicationCountByContainerTypes) {
+            this.containers.add(container);
+            Integer prevReplicationCount = replicationCountByContainerTypes.get(containerType);
+            if (prevReplicationCount == null) {
+                this.replicationCountByContainerTypes.put(containerType, 1);
+            }
+            else {
+                this.replicationCountByContainerTypes.put(containerType, prevReplicationCount + 1);
+            }
+        }
+    }
+
     public boolean isReference() {
         return calledBy().size() == 0 && callsTo().size() > 0;
     }
 
-    public long findNumberOfContainersByType(ContainerType type) {
-        return containers().stream().filter(container -> container.containerType().equals(type)).count();
+    public Set<ContainerType> getContainerTypes() {
+        return replicationCountByContainerTypes.keySet();
+    }
+
+    public Integer getReplicationCount(ContainerType containerType) {
+        return replicationCountByContainerTypes.get(containerType);
     }
 
     @Override

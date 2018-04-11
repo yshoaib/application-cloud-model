@@ -1,5 +1,7 @@
 package ca.appsimulations.models.model.cloud;
 
+import ca.appsimulations.models.model.application.Service;
+
 import java.util.Optional;
 
 public class ContainerFactory {
@@ -11,7 +13,9 @@ public class ContainerFactory {
         if (cloud.hasContainerType(containerType)) {
             Container container =
                     Container.builder().name(name).containerImage(containerImage).containerType(containerType).build();
-            containerImage.service().containers().add(container);
+
+            Service service = containerImage.service();
+            service.addContainer(container, containerType);
             containerImage.instances().add(container);
             cloud.containers().add(container);
             result = Optional.of(container);

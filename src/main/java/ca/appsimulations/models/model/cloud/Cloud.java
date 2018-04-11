@@ -44,7 +44,7 @@ public class Cloud {
         Optional<ContainerImage> containerImageOptional = this.findContainerImage(containerImageName);
         if (containerImageOptional.isPresent() == false) {
             throw new IllegalArgumentException(
-                    "unable to instantiate container image: " + containerName + " because there is no container " +
+                    "unable to instantiate container : " + containerName + " because there is no container " +
                     "image: " + containerImageName);
         }
         ContainerImage image = containerImageOptional.get();
@@ -52,16 +52,28 @@ public class Cloud {
         return image.instantiate(containerName, this, containerType);
     }
 
-    public Container instantiateContainer(String containerImageName, ContainerType containerType) {
+
+    public List<Container> instantiateContainer(String containerImageName,
+                                                ContainerType containerType,
+                                                int replication) {
         Optional<ContainerImage> containerImageOptional = this.findContainerImage(containerImageName);
-        String containerName = "p" + containerImageName;
         if (containerImageOptional.isPresent() == false) {
             throw new IllegalArgumentException(
-                    "unable to instantiate container image: " + containerName + " because there is no container " +
+                    "unable to instantiate container because there is no container " +
                     "image: " + containerImageName);
         }
         ContainerImage image = containerImageOptional.get();
+        List<Container> containers = new ArrayList<>();
+        int size = image.instances().size();
+        for (int i = size; i < replication + size; i++) {
+            String containerName = "p" + containerImageName + "_" + containerType.getName() + "_r" + replication;
+            containers.add(image.instantiate(containerName, this, containerType));
+        }
+        return containers;
+    }
 
-        return image.instantiate(containerName, this, containerType);
+    public Container instantiateContainer(String containerImageName, ContainerType containerType) {
+        String containerName = "p" + containerImageName;
+        return instantiateContainer(containerName, containerImageName, containerType);
     }
 }
