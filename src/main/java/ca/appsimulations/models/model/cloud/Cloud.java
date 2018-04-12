@@ -66,7 +66,7 @@ public class Cloud {
         List<Container> containers = new ArrayList<>();
         int size = image.instances().size();
         for (int i = size; i < replication + size; i++) {
-            String containerName = "p" + containerImageName + "_" + containerType.getName() + "_r" + replication;
+            String containerName = "p" + containerImageName + "_" + containerType.getName() + "_r" + i;
             containers.add(image.instantiate(containerName, this, containerType));
         }
         return containers;
