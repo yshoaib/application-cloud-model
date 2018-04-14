@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.5] - 2018-04-14
+### Changed
+- update/fix lqn replication.
+
+
 ## [2.0.4] - 2018-04-11
 ### Changed
 - Use 1.0.5 version of jLQNInterface
@@ -34,7 +39,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Release version 1.0.0 of the software. 
 
 
-[Unreleased]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.4...HEAD
+[Unreleased]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.5...HEAD
+[2.0.5]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.4...v2.0.5
 [2.0.4]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.2...v2.0.4
 [2.0.2]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.0...v2.0.1

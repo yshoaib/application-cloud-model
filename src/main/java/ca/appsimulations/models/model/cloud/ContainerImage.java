@@ -56,4 +56,16 @@ public class ContainerImage {
 
         return Objects.hash(super.hashCode(), name, service);
     }
+
+    public List<Container> instantiate(Cloud cloud,
+                                       ContainerType containerType,
+                                       int replication) {
+        List<Container> newContainers = new ArrayList<>();
+        int size = instances.size();
+        for (int i = size; i < replication + size; i++) {
+            String containerName = "p" + this.name + "_" + containerType.getName() + "_r" + i;
+            newContainers.add(instantiate(containerName, cloud, containerType));
+        }
+        return newContainers;
+    }
 }

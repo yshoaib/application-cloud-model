@@ -63,13 +63,7 @@ public class Cloud {
                     "image: " + containerImageName);
         }
         ContainerImage image = containerImageOptional.get();
-        List<Container> containers = new ArrayList<>();
-        int size = image.instances().size();
-        for (int i = size; i < replication + size; i++) {
-            String containerName = "p" + containerImageName + "_" + containerType.getName() + "_r" + i;
-            containers.add(image.instantiate(containerName, this, containerType));
-        }
-        return containers;
+        return image.instantiate(this, containerType, replication);
     }
 
     public Container instantiateContainer(String containerImageName, ContainerType containerType) {

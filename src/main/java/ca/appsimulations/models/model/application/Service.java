@@ -20,10 +20,15 @@ public class Service {
     private final String name;
     private final App app;
     private final int threads;
+    @Builder.Default
     private final List<Container> containers = new ArrayList<>();
+    @Builder.Default
     private final List<ContainerImage> containerImages = new ArrayList<>();
+    @Builder.Default
     private final CallResolver callResolver = new CallResolver();
+    @Builder.Default
     private final List<ServiceEntry> entries = new ArrayList<>();
+    @Builder.Default
     private final Map<ContainerType, Integer> replicationCountByContainerTypes = new HashMap();
 
     public void calls(String serviceName, Call call) {
@@ -66,15 +71,13 @@ public class Service {
     }
 
     public void addContainer(Container container, ContainerType containerType) {
-        synchronized (this.replicationCountByContainerTypes) {
-            this.containers.add(container);
-            Integer prevReplicationCount = replicationCountByContainerTypes.get(containerType);
-            if (prevReplicationCount == null) {
-                this.replicationCountByContainerTypes.put(containerType, 1);
-            }
-            else {
-                this.replicationCountByContainerTypes.put(containerType, prevReplicationCount + 1);
-            }
+        this.containers.add(container);
+        Integer prevReplicationCount = replicationCountByContainerTypes.get(containerType);
+        if (prevReplicationCount == null) {
+            this.replicationCountByContainerTypes.put(containerType, 1);
+        }
+        else {
+            this.replicationCountByContainerTypes.put(containerType, prevReplicationCount + 1);
         }
     }
 
@@ -83,7 +86,7 @@ public class Service {
     }
 
     public Set<ContainerType> getContainerTypes() {
-        return replicationCountByContainerTypes.keySet();
+        return new HashSet<>(replicationCountByContainerTypes.keySet());
     }
 
     public Integer getReplicationCount(ContainerType containerType) {
