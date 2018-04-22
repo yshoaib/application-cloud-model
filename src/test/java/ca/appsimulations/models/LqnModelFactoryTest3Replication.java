@@ -3,6 +3,7 @@ package ca.appsimulations.models;
 import ca.appsimulations.jlqninterface.lqn.model.LqnModel;
 import ca.appsimulations.jlqninterface.lqn.model.LqnXmlDetails;
 import ca.appsimulations.jlqninterface.lqn.model.SolverParams;
+import ca.appsimulations.jlqninterface.lqn.model.handler.LqnSolver;
 import ca.appsimulations.jlqninterface.lqn.model.writer.LqnModelWriter;
 import ca.appsimulations.models.model.application.App;
 import ca.appsimulations.models.model.application.DefaultAppBuilder;
