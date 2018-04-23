@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.1.0] - 2018-04-22
+### Added
+- Support multiple entries per service and service entry think time.
+
 ## [2.0.6] - 2018-04-14
 ### Changed
 - update/fix lqn replication.
@@ -39,7 +43,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Release version 1.0.0 of the software. 
 
 
-[Unreleased]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.6...HEAD
+[Unreleased]: https://github.com/yshoaib/application-cloud-model/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.4...v2.0.6
 [2.0.6]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.4...v2.0.6
 [2.0.4]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.2...v2.0.4
 [2.0.2]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.1...v2.0.2

@@ -6,8 +6,9 @@ import ca.appsimulations.jlqninterface.lqn.model.SolverParams;
 import ca.appsimulations.jlqninterface.lqn.model.handler.LqnSolver;
 import ca.appsimulations.jlqninterface.lqn.model.writer.LqnModelWriter;
 import ca.appsimulations.models.model.application.App;
-import ca.appsimulations.models.model.application.DefaultAppBuilder;
+import ca.appsimulations.models.model.application.EntcsAppBuilder;
 import ca.appsimulations.models.model.cloud.DefaultCloudContainerBuilder;
+import ca.appsimulations.models.model.cloud.EntcsCloudBuilder;
 import ca.appsimulations.models.model.lqnmodel.LqnModelFactory;
 import org.apache.commons.io.IOUtils;
 import org.assertj.core.api.SoftAssertions;
@@ -20,14 +21,15 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.File;
 import java.io.IOException;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class LqnModelFactoryTest {
+public class LqnModelFactorEntcsAppBuilderTest {
 
     private File outputFile;
     private SoftAssertions softly;
+    private final String INPUT_LQNX = "entcs_bike_routes.lqnx";
+
     private final String LQN_XSD = "lqn.xsd";
-    private final String INPUT_LQNX = "input.lqnx";
     private final String OUTPUT_FILE = "test-output.lqnx";
 
     private static final double CONVERGENCE = 0.01;
@@ -52,17 +54,16 @@ public class LqnModelFactoryTest {
         String appName = "test";
         int maxReplicas = 10;
         double responseTime = 350.0;
-        App app = DefaultAppBuilder.build(appName,
-                                          maxReplicas,
-                                          responseTime);
-
-        DefaultCloudContainerBuilder.build(app);
+        App app = EntcsAppBuilder.build(appName,
+                                        maxReplicas,
+                                        responseTime);
+        EntcsCloudBuilder.build(app);
 
         LqnXmlDetails xmlDetails = buildLqnXmlDetails();
         SolverParams solverParams = buildSolverParams();
         LqnModel lqnModel = LqnModelFactory.build(app, xmlDetails, solverParams);
         new LqnModelWriter().write(lqnModel, outputFile.getAbsolutePath());
-        assertXmlAgainstSchema(outputFile.getAbsolutePath(), LQN_XSD);
+        LqnSolver.savePostScript(outputFile.getAbsolutePath(), "test.ps");
         assertThat(readFile(outputFile)).as("xml contents verification").isXmlEqualToContentOf(getResourceFile(
                 INPUT_LQNX));
         softly.assertAll();
@@ -110,6 +111,4 @@ public class LqnModelFactoryTest {
     public File getResourceFile(String resourceName) throws Exception {
         return new File(this.getClass().getClassLoader().getResource(resourceName).toURI());
     }
-
-
 }

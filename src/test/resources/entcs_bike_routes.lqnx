@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<lqn-model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           description="lqn2xml 5.4 solution for model from: input-rep.lqn." name="input-rep"
+           xsi:noNamespaceSchemaLocation="lqn.xsd">
+    <solver-params comment="Test System - 10 users think 2 - no replication" conv_val="0.01" it_limit="50000"
+                   print_int="1" underrelax_coeff="0.9"/>
+    <processor name="pClient" scheduling="inf">
+        <task multiplicity="1" name="Browser_1" scheduling="ref">
+            <entry name="load_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="1.0E-4" name="load_1" phase="1" think-time="7.0">
+                        <synch-call calls-mean="1.0" dest="sendHTML_1"/>
+                        <synch-call calls-mean="1.0" dest="sendJS1_1"/>
+                        <synch-call calls-mean="1.0" dest="sendJS2_1"/>
+                        <synch-call calls-mean="1.0" dest="sendJS3_1"/>
+                        <synch-call calls-mean="1.0" dest="viewRoutes_1"/>
+                        <synch-call calls-mean="1.0" dest="routing1_1"/>
+                        <synch-call calls-mean="1.0" dest="add1_1"/>
+                        <synch-call calls-mean="1.0" dest="routing2_1"/>
+                        <synch-call calls-mean="1.0" dest="add2_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+        </task>
+    </processor>
+    <processor name="pAppServer" quantum="0.2" scheduling="ps">
+        <task multiplicity="1" name="AppServer_1" scheduling="fcfs">
+            <entry name="sendHTML_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.00962" name="sendHTML_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk1_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="sendJS1_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="8.5E-4" name="sendJS1_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk2_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="sendJS2_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.0048" name="sendJS2_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk3_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="sendJS3_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="6.4E-4" name="sendJS3_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk4_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="viewRoutes_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.09555" name="viewRoutes_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="dbViewRoutes_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="routing1_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.21167" name="routing1_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="dbRouting1_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="add1_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.05342" name="add1_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="dbAdd1_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="routing2_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.18616" name="routing2_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="dbRouting2_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="add2_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.05343" name="add2_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="dbAdd2_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+        </task>
+    </processor>
+    <processor name="pDB" quantum="0.2" scheduling="ps">
+        <task multiplicity="1" name="DB_1" scheduling="fcfs">
+            <entry name="dbViewRoutes_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.02938" name="dbViewRoutes_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk5_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="dbRouting1_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.25272" name="dbRouting1_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk6_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="dbAdd1_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="4.3E-4" name="dbAdd1_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk7_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="dbRouting2_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="0.05209" name="dbRouting2_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk8_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+            <entry name="dbAdd2_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="4.1E-4" name="dbAdd2_1" phase="1">
+                        <synch-call calls-mean="1.0" dest="disk9_1"/>
+                    </activity>
+                </entry-phase-activities>
+            </entry>
+        </task>
+    </processor>
+    <processor name="pDisk" quantum="0.2" scheduling="ps">
+        <task multiplicity="1" name="Disk_1" scheduling="fcfs">
+            <entry name="disk1_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="1.0E-5" name="disk1_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+            <entry name="disk2_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="1.0E-5" name="disk2_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+            <entry name="disk3_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="1.0E-5" name="disk3_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+            <entry name="disk4_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="2.0E-5" name="disk4_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+            <entry name="disk5_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="6.0E-5" name="disk5_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+            <entry name="disk6_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="2.8E-4" name="disk6_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+            <entry name="disk7_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="3.2E-4" name="disk7_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+            <entry name="disk8_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="2.3E-4" name="disk8_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+            <entry name="disk9_1" type="PH1PH2">
+                <entry-phase-activities>
+                    <activity host-demand-mean="3.3E-4" name="disk9_1" phase="1"/>
+                </entry-phase-activities>
+            </entry>
+        </task>
+    </processor>
+</lqn-model>

@@ -14,7 +14,6 @@ import ca.appsimulations.models.model.application.App;
 import ca.appsimulations.models.model.application.Call;
 import ca.appsimulations.models.model.application.Service;
 import ca.appsimulations.models.model.application.ServiceEntry;
-import ca.appsimulations.models.model.cloud.Container;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -72,6 +71,7 @@ public class LqnModelFactory {
                                                                        processor,
                                                                        service.isReference(),
                                                                        service.threads());
+
                                          taskId.getAndIncrement();
                                          cloudAppLqnMap.add(service, task);
                                      });
@@ -91,7 +91,7 @@ public class LqnModelFactory {
 
                 Service destService = destEntry.service();
 
-                serviceQueue.add(destService);
+                addUniqueElementToQueue(serviceQueue, destService);
 
                 Collection<Task> sourceTasks = cloudAppLqnMap.getTasks(sourceService);
                 Collection<Task> destTasks = cloudAppLqnMap.getTasks(destService);
@@ -138,6 +138,18 @@ public class LqnModelFactory {
 
         lqnModel.buildRefTasksFromExistingTasks();
         return lqnModel;
+    }
+
+    private static void addUniqueElementToQueue(Queue<Service> serviceQueue, Service destService) {
+        boolean unique = true;
+        for (Service service : serviceQueue) {
+            if (service.equals(destService)) {
+                unique = false;
+            }
+        }
+        if (unique) {
+            serviceQueue.add(destService);
+        }
     }
 
 
@@ -193,7 +205,7 @@ public class LqnModelFactory {
 
                 Service destService = destEntry.service();
 
-                serviceQueue.add(destService);
+                addUniqueElementToQueue(serviceQueue, destService);
 
                 Collection<Task> sourceTasks = cloudAppLqnMap.getTasks(sourceService);
                 Collection<Task> destTasks = cloudAppLqnMap.getTasks(destService);
@@ -266,7 +278,8 @@ public class LqnModelFactory {
                                           serviceEntry.activityNamePhase1(),
                                           lqnModel,
                                           task,
-                                          serviceEntry.serviceDemand());
+                                          serviceEntry.serviceDemand(),
+                                          serviceEntry.thinkTime());
 
         }
         cloudAppLqnMap.add(service, lqnEntry);

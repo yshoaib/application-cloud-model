@@ -105,6 +105,10 @@ public class AppBuilder {
         }
 
         public ServiceBuilder serviceEntry(String name, String activityNamePhase1, double serviceDemand) {
+            return buildAserviceEntry(name, activityNamePhase1, serviceDemand);
+        }
+
+        private ServiceBuilder buildAserviceEntry(String name, String activityNamePhase1, double serviceDemand) {
             Optional<ServiceEntry> serviceEntryOptional =
                     ServiceEntryFactory.build(name, activityNamePhase1, service, serviceDemand);
             if (serviceEntryOptional.isPresent() == false) {
@@ -115,9 +119,18 @@ public class AppBuilder {
             return this;
         }
 
+        public ServiceBuilder serviceEntry(String name, String activityNamePhase1, double serviceDemand, double
+                thinkTime) {
+            buildAserviceEntry(name, activityNamePhase1, serviceDemand);
+            Optional<ServiceEntry> serviceEntry = service.findServiceEntry(name);
+            serviceEntry.get().thinkTime(thinkTime);
+            return this;
+        }
+
         public AppBuilder buildService() {
             return appBuilder;
         }
+
     }
 
 }
