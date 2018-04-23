@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class LqnModelFactoryTest2 {
+public class LqnModelFactorySecondTest {
 
 
     private File outputFile;

@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class LqnModelFactoryTest3Replication {
+public class LqnModelFactoryReplicationTest {
 
 
     private File outputFile;
@@ -49,7 +49,7 @@ public class LqnModelFactoryTest3Replication {
         softly = new SoftAssertions();
     }
 
-    @Test
+    @Test(enabled = false)
     public void testLqnModelFactory() throws Exception {
         String appName = "test";
         int maxReplicas = 10;
@@ -70,7 +70,7 @@ public class LqnModelFactoryTest3Replication {
         softly.assertAll();
     }
 
-    @Test
+    @Test(enabled = false)
     public void testLqnModelFactory2() throws Exception {
         String appName = "test";
         int maxReplicas = 10;
