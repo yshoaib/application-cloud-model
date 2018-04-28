@@ -38,6 +38,18 @@ public class Cloud {
         return result;
     }
 
+    public Optional<ContainerType> findContainerTypeByName(String name){
+        Optional<ContainerType> result = Optional.empty();
+        List<ContainerType> types =
+                containerTypes.parallelStream().filter(type -> type.name().equals(name)).collect(toList());
+
+        if(types.isEmpty() == false){
+            result = Optional.of(types.get(0));
+        }
+
+        return result;
+    }
+
     public Container instantiateContainer(String containerName,
                                           String containerImageName,
                                           ContainerType containerType) {
