@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static ca.appsimulations.models.model.cloud.ContainerType.SMALL;
-
 @Builder
 @Data
 @Accessors(chain = true, fluent = true)
@@ -63,7 +61,7 @@ public class ContainerImage {
         List<Container> newContainers = new ArrayList<>();
         int size = instances.size();
         for (int i = size; i < replication + size; i++) {
-            String containerName = "p" + this.name + "_" + containerType.getName() + "_r" + i;
+            String containerName = "p" + this.name + "_" + containerType.name() + "_r" + i;
             newContainers.add(instantiate(containerName, cloud, containerType));
         }
         return newContainers;
