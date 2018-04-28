@@ -10,7 +10,7 @@ public class DefaultCloudContainerBuilder {
     public static Cloud build(App app){
         Cloud cloud = CloudBuilder.builder()
                 .name("cloud1")
-                .containerTypes(asList(SMALL, MEDIUM, LARGE))
+                .containerTypes(asList(SM, MD, LA))
                 .containerImage("Browser")
                 .service("Browser", app)
                 .buildContainerImage()
@@ -28,11 +28,11 @@ public class DefaultCloudContainerBuilder {
                 .buildContainerImage()
                 .build();
 
-        cloud.instantiateContainer("pClient", "Browser", SMALL);
-        cloud.instantiateContainer("pTaskA", "TaskA", SMALL);
-        cloud.instantiateContainer("pTaskB", "TaskB", SMALL);
-        cloud.instantiateContainer("pTaskC", "TaskC", SMALL);
-        cloud.instantiateContainer("pTaskD", "TaskD", SMALL);
+        cloud.instantiateContainer("pClient", "Browser", SM);
+        cloud.instantiateContainer("pTaskA", "TaskA", SM);
+        cloud.instantiateContainer("pTaskB", "TaskB", SM);
+        cloud.instantiateContainer("pTaskC", "TaskC", SM);
+        cloud.instantiateContainer("pTaskD", "TaskD", SM);
         return cloud;
     }
 }

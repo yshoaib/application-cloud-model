@@ -62,8 +62,7 @@ public class LqnModelFactory {
                                          Processor processor = ProcessorFactory.build(lqnModel,
                                                                                       container.name(),
                                                                                       service.isReference(),
-                                                                                      container.containerType()
-                                                                                              .getCores());
+                                                                                      container.containerType().cores());
                                          cloudAppLqnMap.add(service, processor);
 
                                          Task task = TaskFactory.build(service.name() + "_" + taskId,
@@ -176,7 +175,7 @@ public class LqnModelFactory {
                         Processor processor = ProcessorFactory.build(lqnModel,
                                                                      name,
                                                                      service.isReference(),
-                                                                     containerType.getCores(),
+                                                                     containerType.cores(),
                                                                      replicationCount);
                         cloudAppLqnMap.add(service, processor);
 
