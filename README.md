@@ -21,6 +21,17 @@ Changelog
 =========
 [Changelog](CHANGELOG.md)
 
+Generating UML diagrams
+=======================
+- Refer to https://github.com/ruben2020/tags2uml
+- Run following commands from within the `application-cloud-model` git repository:
+```
+find . -name "*.java" > ./JavaFiles.txt
+ctags --fields=+latinK -L ./JavaFiles.txt
+tags2uml --infile tags --outfile ApplicationCloudModel.dot
+dot -Tpng -oApplicationCloudModel.png ApplicationCloudModel.dot
+```
+
 Related projects
 ===================
 https://github.com/yshoaib/jLQNInterface

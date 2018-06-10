@@ -95,3 +95,9 @@ hs_err_pid*
 /test-output.lqnx
 /test.ps
 /test-output.ps
+
+# ctags, uml-diagrams, graphviz files
+ApplicationCloudModel.dot
+ApplicationCloudModel.png
+JavaFiles.txt
+tags
