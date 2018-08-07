@@ -21,6 +21,10 @@ Changelog
 =========
 [Changelog](CHANGELOG.md)
 
+Examples
+=========
+[modelsExamples](https://github.com/yshoaib/modelsExamples)
+
 Generating UML diagrams
 =======================
 - Refer to https://github.com/ruben2020/tags2uml
