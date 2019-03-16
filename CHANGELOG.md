@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.3] - 2019-03-16
+### Changed
+- Allow building a Call where number of calls can be of type double.
+
 ## [2.1.0] - 2018-04-22
 ### Added
 - Support multiple entries per service and service entry think time.
@@ -42,9 +46,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Release version 1.0.0 of the software. 
 
-
-[Unreleased]: https://github.com/yshoaib/application-cloud-model/compare/v2.1.0...HEAD
-[2.1.0]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.4...v2.0.6
+[Unreleased]: https://github.com/yshoaib/application-cloud-model/compare/v3.0.3...HEAD
+[3.0.3]: https://github.com/yshoaib/application-cloud-model/compare/v2.1.0...v3.0.3
+[2.1.0]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.6...v2.1.0
 [2.0.6]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.4...v2.0.6
 [2.0.4]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.2...v2.0.4
 [2.0.2]: https://github.com/yshoaib/application-cloud-model/compare/v2.0.1...v2.0.2
