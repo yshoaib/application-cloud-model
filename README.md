@@ -38,7 +38,7 @@ dot -Tpng -oApplicationCloudModel.png ApplicationCloudModel.dot
 
 Release
 ========
-1. Confirm all required changes are in the `master` branch
+1. Confirm all required changes are in the `master` branch and push those changes
 1. In `master` branch run the following commands
 ```
 mvn release:clean release:prepare
