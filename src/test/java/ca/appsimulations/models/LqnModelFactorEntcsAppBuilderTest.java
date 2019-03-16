@@ -7,7 +7,6 @@ import ca.appsimulations.jlqninterface.lqn.model.handler.LqnSolver;
 import ca.appsimulations.jlqninterface.lqn.model.writer.LqnModelWriter;
 import ca.appsimulations.models.model.application.App;
 import ca.appsimulations.models.model.application.EntcsAppBuilder;
-import ca.appsimulations.models.model.cloud.DefaultCloudContainerBuilder;
 import ca.appsimulations.models.model.cloud.EntcsCloudBuilder;
 import ca.appsimulations.models.model.lqnmodel.LqnModelFactory;
 import org.apache.commons.io.IOUtils;

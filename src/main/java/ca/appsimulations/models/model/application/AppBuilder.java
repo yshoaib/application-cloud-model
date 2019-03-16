@@ -33,7 +33,7 @@ public class AppBuilder {
     }
 
     public AppBuilder call(String name, String source, String destination, String sourceEntryName, String
-            sourceDestinationName, int numCalls) {
+            sourceDestinationName, double numCalls) {
         CallBuilder.build(name, app, source, destination, sourceEntryName, sourceDestinationName, numCalls);
         return this;
     }
@@ -47,7 +47,7 @@ public class AppBuilder {
                                  String destinationName,
                                  String sourceEntryName,
                                  String destinationEntryName,
-                                 int numCalls) {
+                                 double numCalls) {
             Optional<Service> sourceOptional = app.findService(sourceName);
             Optional<Service> destinationOptional = app.findService(destinationName);
 

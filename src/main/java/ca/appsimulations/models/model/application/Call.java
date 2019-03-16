@@ -19,7 +19,7 @@ public class Call {
                 Service destination,
                 ServiceEntry sourceEntry,
                 ServiceEntry destinationEntry,
-                int numCalls) {
+                double numCalls) {
         this.name = name;
         this.source = source;
         this.destination = destination;
